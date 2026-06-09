@@ -18,4 +18,8 @@ spring:
             locator:
               enabled: true
               lower-case-service-id: true
+#eureka.client.serviceUrl.defaultZone=http://localhost:8082/eureka/
+spring.cloud.config:
+  username: configUser
+  password: configPassword
 eureka.client.serviceUrl.defaultZone: http://discUser:discPassword@localhost:8082/eureka/

@@ -11,8 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-@EnableWebSecurity
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
     @Bean
     public UserDetailsService users() {
@@ -22,20 +22,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) {
         return http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/ratings", "/ratings/*").permitAll()
-                        //.authenticated()
+                        .requestMatchers(HttpMethod.GET, "/ratings")
+                        .authenticated()
+                        .requestMatchers(HttpMethod.GET, "/ratings/*")
+                        .hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/ratings")
                         .hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/ratings/*")
                         .hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/ratings/*")
                         .hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/ratings/*")
-                        .hasRole("ADMIN")
                         .anyRequest()
                         .authenticated()
                 )
-                .httpBasic(Customizer.withDefaults())
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .build();
     }
